@@ -1,7 +1,7 @@
 import pkg from "pg";
 
 const { Pool } = pkg;
-const db = new Pool({
+const connection = new Pool({
   host: "localhost",
   port: 5432,
   user: "postgres",
@@ -9,4 +9,4 @@ const db = new Pool({
   database: "boardcamp",
 });
 
-export default db;
+export default connection;

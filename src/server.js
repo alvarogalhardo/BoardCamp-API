@@ -14,4 +14,4 @@ app.use(gamesRoutes);
 app.use(customerRoutes);
 app.use(rentalRoutes);
 
-app.listen(process.env.PORT || 4000, () => console.log("Running"));
+app.listen(4000, () => console.log("Running"));
