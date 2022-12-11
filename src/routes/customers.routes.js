@@ -4,12 +4,12 @@ import {
   getCustomers,
   postCustomer,
   updateCustomer,
-} from "../controllers/cusotmers.js";
+} from "../controllers/customers.js";
 import {
   checkExists,
   checkQuery,
   validateModel,
-} from "../middlewares/cusotmers.js";
+} from "../middlewares/customers.js";
 
 const customerRoutes = Router();
 
