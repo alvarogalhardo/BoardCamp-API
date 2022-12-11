@@ -61,13 +61,62 @@ export async function checkRentals(req, res, next) {
   const { stockTotal } = res.locals.game;
   try {
     const rentals = await connection.query(
-      "SELECT * FROM rentals WHERE 'gameId'=$1",
+      'SELECT * FROM rentals WHERE "gameId"=$1',
       [gameId]
     );
     if (rentals.rowCount > stockTotal) {
-      res.sendStatus(400);
+      return res.sendStatus(400);
     }
     next();
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+}
+
+export async function checkQuery(req, res, next) {
+  const { customerId } = req.query;
+  if (customerId) {
+    try {
+      const customerRentals = await connection.query(
+        'SELECT * FROM rentals WHERE "customerId"=$1',
+        [customerId]
+      );
+      res.send(customerRentals.rows);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  }
+  const { gameId } = req.query;
+  if (gameId) {
+    try {
+      const gameRentals = await connection.query(
+        'SELECT * FROM rentals WHERE "gameId"=$1',
+        [gameId]
+      );
+      res.send(gameRentals.rows);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  }
+  next();
+}
+
+export async function checkId(req, res, next) {
+  const { id } = req.params;
+  try {
+    const exists = await connection.query("SELECT * FROM rentals WHERE id=$1", [
+      id,
+    ]);
+    if (exists.rowCount === 0) {
+      res.sendStatus(404);
+    } else if (exists.rows[0].returnDate !== null) {
+      res.sendStatus(400);
+    } else {
+      next();
+    }
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

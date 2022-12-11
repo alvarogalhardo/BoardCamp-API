@@ -7,6 +7,7 @@ const connection = new Pool({
   user: "postgres",
   password: "91Dc001832//",
   database: "boardcamp",
+  // connectionString:process.env.DATABASE_URL
 });
 
 export default connection;
