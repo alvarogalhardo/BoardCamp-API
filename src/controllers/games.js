@@ -20,7 +20,7 @@ export async function getGames(req, res) {
     const result = await connection.query(
       'SELECT games.*, categories.name AS categoryName FROM games JOIN categories ON games."categoryId" = categories.id'
     );
-    res.send(result.rows)
+    res.send(result.rows);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

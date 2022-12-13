@@ -10,7 +10,7 @@ const customerModel = Joi.object({
     .pattern(/^(([0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2})|([0-9]{11}))$/)
     .min(10)
     .max(11),
-  birthday: Joi.date()
+  birthday: Joi.date(),
 });
 
 export default customerModel;

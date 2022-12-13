@@ -115,10 +115,46 @@ export async function checkId(req, res, next) {
     } else if (exists.rows[0].returnDate !== null) {
       res.sendStatus(400);
     } else {
+      res.locals.rental = exists.rows[0];
       next();
     }
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
+  }
+}
+
+export function createReturnObject(req, res, next) {
+  function dayToMiliseconds(n) {
+    return n * 24 * 60 * 60 * 1000;
+  }
+
+  function milisecondsToDay(n) {
+    return n / 24 / 60 / 60 / 1000;
+  }
+
+  const { rental } = res.locals;
+  const { rentDate, daysRented, originalPrice } = rental;
+  const returnDate = new Date();
+  if (returnDate - rentDate > dayToMiliseconds(daysRented)) {
+    const daysPassed = milisecondsToDay(
+      returnDate - rentDate - dayToMiliseconds(daysRented)
+    );
+    const pricePerDay = originalPrice / daysRented;
+    const newFee = daysPassed * pricePerDay;
+    const postObject = {
+      ...rental,
+      returnDate,
+      delayFee: newFee,
+    };
+    res.locals.postObj = postObject;
+    next();
+  } else {
+    const postObject = {
+      ...rental,
+      returnDate,
+    };
+    res.locals.postObj = postObject;
+    next();
   }
 }

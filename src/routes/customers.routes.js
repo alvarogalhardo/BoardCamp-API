@@ -21,6 +21,6 @@ customerRoutes.put(
   validateModel,
   checkExists,
   updateCustomer
-); 
+);
 
 export default customerRoutes;

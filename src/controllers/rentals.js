@@ -33,24 +33,17 @@ export async function postRental(req, res) {
 
 export async function getRentals(req, res) {
   try {
-    const allRentals = await connection.query("SELECT * FROM rentals");
-    const result = allRentals.rows.map(async (r) => {
-      console.log(r);
-      const customer = await connection.query(
-        "SELECT name FROM customers WHERE id=$1",
-        [r.customerId]
-      );
-      const game = await connection.query(
-        'SELECT id, name, "categoryId", "categoryId" AS "categoryName" FROM games WHERE id=$1',
-        [r.gameId]
-      );
+    const allRentals = await connection.query(`SELECT * FROM rentals`);
+    const games = await connection.query(`SELECT * FROM games`);
+    const customers = await connection.query(`SELECT * FROM customers`);
+    const send = allRentals.rows.map((rental) => {
       return {
-        ...r,
-        customer: customer.rows[0],
-        game: game.rows[0],
+        ...rental,
+        customer: customers.rows.find(c => c.id === rental.customerId),
+        game: games.rows.find(g => g.id === rental.gameId),
       };
     });
-    console.log(result);
+    res.send(send)
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

@@ -11,9 +11,10 @@ export function checkName(req, res, next) {
 export async function checkExistence(req, res, next) {
   const { name } = req.body;
   try {
-    const exists = await connection.query("SELECT * FROM categories WHERE name=$1", [
-      name,
-    ]);
+    const exists = await connection.query(
+      "SELECT * FROM categories WHERE name=$1",
+      [name]
+    );
     if (exists.rowCount > 0 && exists.rows[0].name === name)
       return res.sendStatus(409);
     next();

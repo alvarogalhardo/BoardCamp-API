@@ -19,9 +19,10 @@ export async function checkExistence(req, res, next) {
     if (!categoryExists.rowCount > 0) {
       return res.sendStatus(400);
     }
-    const gameExists = await connection.query("SELECT * FROM games WHERE name=$1", [
-      name,
-    ]);
+    const gameExists = await connection.query(
+      "SELECT * FROM games WHERE name=$1",
+      [name]
+    );
     if (gameExists.rowCount > 0) {
       return res.sendStatus(409);
     }
@@ -35,8 +36,11 @@ export async function checkExistence(req, res, next) {
 export async function checkQuery(req, res, next) {
   const query = req.query.name;
   if (query) {
-    const result = await connection.query("SELECT * FROM games WHERE name ILIKE $1",[`${query}%`]);
-    return res.send(result.rows)
+    const result = await connection.query(
+      "SELECT * FROM games WHERE name ILIKE $1",
+      [`${query}%`]
+    );
+    return res.send(result.rows);
   }
-  next()
+  next();
 }

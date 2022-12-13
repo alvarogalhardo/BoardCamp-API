@@ -13,9 +13,10 @@ export async function getCategories(req, res) {
 export async function postCategories(req, res) {
   const { name } = req.body;
   try {
-    const posted = await connection.query("INSERT INTO categories (name) VALUES ($1)", [
-      name,
-    ]);
+    const posted = await connection.query(
+      "INSERT INTO categories (name) VALUES ($1)",
+      [name]
+    );
     console.log(posted);
     res.sendStatus(201);
   } catch (err) {
